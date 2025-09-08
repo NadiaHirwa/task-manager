@@ -10,17 +10,22 @@ export default function SignUpPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
-    const res = await fetch("/api/auth/signup", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
-    })
+    try {
+      const res = await fetch("/api/auth/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      })
 
-    const data = await res.json()
-    if (res.ok) {
-      setMessage("✅ User created! Now go to Login.")
-    } else {
-      setMessage("❌ " + data.error)
+      const data = await res.json()
+
+      if (res.ok) {
+        setMessage("✅ User created! Now go to Login.")
+      } else {
+        setMessage("❌ " + data.error)
+      }
+    } catch (err) {
+      setMessage("❌ Something went wrong")
     }
   }
 
