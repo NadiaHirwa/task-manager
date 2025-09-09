@@ -22,8 +22,10 @@ task-manager/
 │   │       ├── [...nextauth]/    # NextAuth.js configuration
 │   │       │   └── route.js      # Auth handler (login/logout)
 │   │       └── signup/           # User registration
-│   │           ├── page.tsx      # Signup UI component
 │   │           └── route.js      # Signup API endpoint
+│   ├── auth/                     # Auth pages (App Router)
+│   │   └── signup/
+│   │       └── page.tsx          # Signup UI component
 │   ├── favicon.ico               # Site favicon
 │   ├── globals.css               # Global styles
 │   ├── layout.tsx                # Root layout component
