@@ -33,7 +33,7 @@ export default function SignUpPage() {
     <div className="flex min-h-screen items-center justify-center bg-gray-100">
       <div className="w-full max-w-md p-6 bg-white shadow rounded-xl">
         <h1 className="text-2xl font-bold mb-4">Sign Up</h1>
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4" suppressHydrationWarning>
           <input
             type="email"
             placeholder="Email"
