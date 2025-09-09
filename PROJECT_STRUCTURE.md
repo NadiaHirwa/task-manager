@@ -36,9 +36,11 @@ task-manager/
 ├── prisma/                       # Database configuration
 │   ├── dev.db                    # SQLite database file
 │   ├── migrations/               # Database migrations
-│   │   ├── 20250908211602_init/  # Initial migration
-│   │   │   └── migration.sql     # Migration SQL
-│   │   └── migration_lock.toml   # Migration lock file
+│   │   ├── 20250908211602_init/                # Initial migration
+│   │   │   └── migration.sql                   # Migration SQL
+│   │   ├── 20250909102235_add_created_at_to_task/  # Adds createdAt to Task
+│   │   │   └── migration.sql
+│   │   └── migration_lock.toml                 # Migration lock file
 │   └── schema.prisma             # Database schema definition
 ├── public/                       # Static assets
 │   ├── file.svg                  # File icon
@@ -70,11 +72,12 @@ model User {
 ### Task Model
 ```prisma
 model Task {
-  id        Int     @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   title     String
-  completed Boolean @default(false)
+  completed Boolean   @default(false)
+  createdAt DateTime  @default(now())
+  user      User      @relation(fields: [userId], references: [id])
   userId    Int
-  user      User    @relation(fields: [userId], references: [id])
 }
 ```
 
@@ -98,6 +101,7 @@ npm run dev      # Start development server
 npm run build    # Build for production
 npm run start    # Start production server
 npm run lint     # Run ESLint
+npx prisma migrate dev -n add_createdAt_to_task # Create/apply migration
 ```
 
 ## 📦 Key Dependencies
