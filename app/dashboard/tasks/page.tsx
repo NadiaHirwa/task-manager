@@ -16,9 +16,12 @@ export default function TasksPage() {
   const [newTitle, setNewTitle] = useState("")
   const [loading, setLoading] = useState(true)
 
-  // Fetch tasks
+  // Helper to fetch tasks
   const fetchTasks = async () => {
-    const res = await fetch("/api/tasks")
+    const res = await fetch("/api/tasks", {
+      method: "GET",
+      credentials: "include",
+    })
     if (res.ok) {
       const data = await res.json()
       setTasks(data)
@@ -33,26 +36,28 @@ export default function TasksPage() {
   if (status === "loading") return <p className="mt-10 text-center">⏳ Checking session...</p>
   if (status === "unauthenticated") return <p className="mt-10 text-center">❌ Please login first</p>
 
-  // Create task
+  // Add a new task
   const handleAddTask = async () => {
     if (!newTitle.trim()) return
     const res = await fetch("/api/tasks", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ title: newTitle }),
+      credentials: "include",   // important for session
     })
     if (res.ok) {
       setNewTitle("")
-      fetchTasks()
+      fetchTasks()             // refresh list
     }
   }
 
-  // Update task
+  // Toggle completed
   const toggleComplete = async (task: Task) => {
     await fetch("/api/tasks", {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ id: task.id, title: task.title, completed: !task.completed }),
+      credentials: "include",
     })
     fetchTasks()
   }
@@ -63,6 +68,7 @@ export default function TasksPage() {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ id }),
+      credentials: "include",
     })
     fetchTasks()
   }
@@ -87,7 +93,10 @@ export default function TasksPage() {
           onChange={(e) => setNewTitle(e.target.value)}
           className="border p-2 flex-1 rounded mr-2"
         />
-        <button onClick={handleAddTask} className="bg-blue-600 text-white px-4 rounded hover:bg-blue-700">
+        <button
+          onClick={handleAddTask}
+          className="bg-blue-600 text-white px-4 rounded hover:bg-blue-700"
+        >
           Add
         </button>
       </div>
