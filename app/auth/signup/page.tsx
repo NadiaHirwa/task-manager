@@ -1,13 +1,13 @@
 "use client"
 
-import { useState } from "react"
+import { useState, type FormEvent, type ChangeEvent } from "react"
 
 export default function SignUpPage() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [message, setMessage] = useState("")
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
     try {
@@ -38,7 +38,7 @@ export default function SignUpPage() {
             type="email"
             placeholder="Email"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
             className="border p-2 rounded"
             required
           />
@@ -46,7 +46,7 @@ export default function SignUpPage() {
             type="password"
             placeholder="Password"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
             className="border p-2 rounded"
             required
           />
