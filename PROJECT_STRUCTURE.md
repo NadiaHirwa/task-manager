@@ -24,11 +24,14 @@ task-manager/
 │   │       └── signup/           # User registration
 │   │           └── route.js      # Signup API endpoint
 │   ├── auth/                     # Auth pages (App Router)
+│   │   ├── login/
+│   │   │   └── page.tsx          # Login UI component
 │   │   └── signup/
 │   │       └── page.tsx          # Signup UI component
 │   ├── favicon.ico               # Site favicon
 │   ├── globals.css               # Global styles
 │   ├── layout.tsx                # Root layout component
+│   ├── providers.tsx             # Client providers (SessionProvider, etc.)
 │   └── page.tsx                  # Home page (default Next.js page)
 ├── prisma/                       # Database configuration
 │   ├── dev.db                    # SQLite database file
@@ -161,6 +164,8 @@ npx prisma studio      # Open database GUI
 ## 🌐 Development Server
 - **URL**: http://localhost:3000
 - **Signup**: http://localhost:3000/api/auth/signup
+- **Login page**: http://localhost:3000/auth/login
+- **Signup page**: http://localhost:3000/auth/signup
 - **Database GUI**: Run `npx prisma studio`
 
 ---

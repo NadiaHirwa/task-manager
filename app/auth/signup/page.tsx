@@ -38,7 +38,7 @@ export default function SignUpPage() {
             type="email"
             placeholder="Email"
             value={email}
-            onChange={(e: ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
+            onChange={(e) => setEmail(e.target.value)}
             className="border p-2 rounded"
             required
           />
@@ -46,7 +46,7 @@ export default function SignUpPage() {
             type="password"
             placeholder="Password"
             value={password}
-            onChange={(e: ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
+            onChange={(e) => setPassword(e.target.value)}
             className="border p-2 rounded"
             required
           />
