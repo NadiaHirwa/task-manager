@@ -16,7 +16,11 @@ export default function TasksPage() {
   const [newTitle, setNewTitle] = useState("")
   const [loading, setLoading] = useState(true)
 
-  // Helper to fetch tasks
+  // Edit state
+  const [editingId, setEditingId] = useState<number | null>(null)
+  const [editTitle, setEditTitle] = useState("")
+
+  // Fetch tasks
   const fetchTasks = async () => {
     const res = await fetch("/api/tasks", {
       method: "GET",
@@ -43,20 +47,20 @@ export default function TasksPage() {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ title: newTitle }),
-      credentials: "include",   // important for session
+      credentials: "include",
     })
     if (res.ok) {
       setNewTitle("")
-      fetchTasks()             // refresh list
+      fetchTasks()
     }
   }
 
   // Toggle completed
   const toggleComplete = async (task: Task) => {
-    await fetch("/api/tasks", {
+    await fetch(`/api/tasks/${task.id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id: task.id, title: task.title, completed: !task.completed }),
+      body: JSON.stringify({ title: task.title, completed: !task.completed }),
       credentials: "include",
     })
     fetchTasks()
@@ -64,12 +68,22 @@ export default function TasksPage() {
 
   // Delete task
   const handleDelete = async (id: number) => {
-    await fetch("/api/tasks", {
+    await fetch(`/api/tasks/${id}`, {
       method: "DELETE",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id }),
       credentials: "include",
     })
+    fetchTasks()
+  }
+
+  // Save edited task
+  const handleSaveEdit = async (id: number) => {
+    await fetch(`/api/tasks/${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ title: editTitle }),
+      credentials: "include",
+    })
+    setEditingId(null)
     fetchTasks()
   }
 
@@ -112,21 +126,61 @@ export default function TasksPage() {
               key={task.id}
               className="flex justify-between items-center border p-2 rounded"
             >
-              <div className="flex items-center">
+              <div className="flex items-center flex-1">
                 <input
                   type="checkbox"
                   checked={task.completed}
                   onChange={() => toggleComplete(task)}
                   className="mr-2"
                 />
-                <span className={task.completed ? "line-through text-gray-500" : ""}>{task.title}</span>
+                {editingId === task.id ? (
+                  <input
+                    type="text"
+                    value={editTitle}
+                    onChange={(e) => setEditTitle(e.target.value)}
+                    className="border p-1 flex-1"
+                  />
+                ) : (
+                  <span className={task.completed ? "line-through text-gray-500" : ""}>
+                    {task.title}
+                  </span>
+                )}
               </div>
-              <button
-                onClick={() => handleDelete(task.id)}
-                className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600"
-              >
-                Delete
-              </button>
+
+              {editingId === task.id ? (
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => handleSaveEdit(task.id)}
+                    className="bg-green-600 text-white px-2 py-1 rounded hover:bg-green-700"
+                  >
+                    Save
+                  </button>
+                  <button
+                    onClick={() => setEditingId(null)}
+                    className="bg-gray-400 text-white px-2 py-1 rounded hover:bg-gray-500"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              ) : (
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => {
+                      setEditingId(task.id)
+                      setEditTitle(task.title)
+                    }}
+                    className="bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-600"
+                  >
+                    Edit
+                  </button>
+                  <button
+                    onClick={() => handleDelete(task.id)}
+                    className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600"
+                  >
+                    Delete
+                  </button>
+                </div>
+              )}
             </li>
           ))}
         </ul>
