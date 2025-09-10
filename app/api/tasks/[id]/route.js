@@ -17,3 +17,16 @@ export async function PUT(req, { params}) {
 
     return Response.json(updated)
 }
+
+export async function DELETE(req, { params }) {
+    const session = await getServerSession(authOptions)
+    if (!session) return new Response("Unauthorized", { status: 401 })
+
+    const taskId = parseInt(params.id)
+
+    await prisma.task.delete({
+        where: { id:taskId, userId: session.user.id },
+    })
+
+    return Response.json({ message: "Task deleted" })
+}
