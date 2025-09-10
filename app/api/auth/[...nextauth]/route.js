@@ -37,6 +37,20 @@ export const authOptions = {
   session: {
     strategy: "jwt", // Use JWT (JSON Web Tokens) for session
   },
+  callbacks: {
+    async jwt({ token, user }) {
+      if (user?.id) {
+        token.id = user.id
+      }
+      return token
+    },
+    async session({ session, token }) {
+      if (session.user && token?.id) {
+        session.user.id = token.id
+      }
+      return session
+    },
+  },
   secret: process.env.NEXTAUTH_SECRET,
 }
 
