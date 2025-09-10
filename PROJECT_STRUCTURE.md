@@ -18,16 +18,23 @@ A modern task management application built with Next.js 15, featuring user authe
 task-manager/
 ├── app/                          # Next.js App Router directory
 │   ├── api/                      # API routes
-│   │   └── auth/                 # Authentication endpoints
-│   │       ├── [...nextauth]/    # NextAuth.js configuration
-│   │       │   └── route.js      # Auth handler (login/logout)
-│   │       └── signup/           # User registration
-│   │           └── route.js      # Signup API endpoint
+│   │   ├── auth/                 # Authentication endpoints
+│   │   │   ├── [...nextauth]/    # NextAuth.js configuration
+│   │   │   │   └── route.js      # Auth handler (login/logout)
+│   │   │   └── signup/           # User registration
+│   │   │       └── route.js      # Signup API endpoint
+│   │   └── tasks/                # Task management endpoints
+│   │       ├── [id]/             # Individual task operations
+│   │       │   └── route.js      # PUT/DELETE task endpoints
+│   │       └── route.js          # GET/POST tasks endpoints
 │   ├── auth/                     # Auth pages (App Router)
 │   │   ├── login/
 │   │   │   └── page.tsx          # Login UI component
 │   │   └── signup/
 │   │       └── page.tsx          # Signup UI component
+│   ├── dashboard/                # Protected dashboard pages
+│   │   └── tasks/
+│   │       └── page.tsx          # Task management UI
 │   ├── favicon.ico               # Site favicon
 │   ├── globals.css               # Global styles
 │   ├── layout.tsx                # Root layout component
@@ -86,13 +93,18 @@ model Task {
 ### Features Implemented
 - ✅ User registration with email/password
 - ✅ Password hashing using bcrypt
-- ✅ NextAuth.js configuration
+- ✅ NextAuth.js configuration with JWT callbacks
 - ✅ Credentials provider setup
-- ✅ JWT session strategy
+- ✅ JWT session strategy with user ID in session
+- ✅ Session-based authentication for API routes
 
 ### API Endpoints
 - `POST /api/auth/signup` - User registration
 - `POST /api/auth/[...nextauth]` - Login/logout (NextAuth)
+- `GET /api/tasks` - Get user's tasks
+- `POST /api/tasks` - Create new task
+- `PUT /api/tasks/[id]` - Update task
+- `DELETE /api/tasks/[id]` - Delete task
 
 ## 🚀 Available Scripts
 
@@ -130,24 +142,27 @@ npx prisma migrate dev -n add_createdAt_to_task # Create/apply migration
 - Database schema with Prisma
 - User registration system
 - Password hashing and security
-- NextAuth.js configuration
-- Basic UI for signup
+- NextAuth.js configuration with JWT callbacks
+- Session-based authentication for API routes
+- Task management API endpoints (CRUD)
+- Task management UI at `/dashboard/tasks`
+- Protected routes and session handling
+- User-specific task isolation
 
 ### 🚧 In Development
-- Login page/component
-- Task management interface
-- Protected routes
-- Dashboard/home page
-- Task CRUD operations
+- Task filtering and search functionality
+- Task categories/priorities
+- Enhanced UI/UX improvements
+- Task due dates and reminders
 
 ### 📋 Next Steps
-1. Create login page
-2. Build task management UI
-3. Implement task CRUD operations
-4. Add protected routes
-5. Create user dashboard
-6. Add task filtering and search
-7. Implement task categories/priorities
+1. Add task filtering and search
+2. Implement task categories/priorities
+3. Add task due dates and reminders
+4. Enhance UI/UX with better styling
+5. Add task completion statistics
+6. Implement task sharing/collaboration
+7. Add task export functionality
 
 ## 🔧 Environment Setup
 
@@ -170,6 +185,8 @@ npx prisma studio      # Open database GUI
 - **Signup**: http://localhost:3000/api/auth/signup
 - **Login page**: http://localhost:3000/auth/login
 - **Signup page**: http://localhost:3000/auth/signup
+- **Dashboard**: http://localhost:3000/dashboard/tasks
+- **API Base**: http://localhost:3000/api
 - **Database GUI**: Run `npx prisma studio`
 
 ---
